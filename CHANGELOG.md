@@ -3,6 +3,10 @@
 All notable changes to this project will be documented here. This project follows
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+  - Add a security policy (`SECURITY.md`).
+
 ## v1.1.1 - 2026-08-05
 
   - Validate configuration at boot: unknown option keys and invalid default colors now raise `ArgumentError` when the middleware is constructed. 

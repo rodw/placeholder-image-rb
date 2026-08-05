@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
     "rubygems_mfa_required" => "true"
   }
 
-  spec.files = Dir.glob(%w[lib/**/*.rb sig/**/*.rbs LICENSE.txt README.md CHANGELOG.md])
+  spec.files = Dir.glob(%w[lib/**/*.rb sig/**/*.rbs LICENSE.txt README.md CHANGELOG.md SECURITY.md])
   spec.require_paths = ["lib"]
 
   spec.add_dependency "rack", ">= 3.0", "< 4.0"

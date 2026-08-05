@@ -1,12 +1,15 @@
 # Placeholder Image
 
-A dependency-light Rack middleware that generates simple placeholder images in pure Ruby (stdlib zlib only, no image gem dependencies). 
+A dependency-light [Rack middleware](#installation) that generates simple placeholder images in pure Ruby (stdlib zlib only, no image gem dependencies).
+
+Also available as stand-alone [Docker image](#running-as-a-stand-alone-container).
 
 [![CI](https://github.com/rodw/placeholder-image-rb/actions/workflows/ci.yml/badge.svg)](https://github.com/rodw/placeholder-image-rb/actions/workflows/ci.yml)
-[![Gem Version](https://badge.fury.io/rb/placeholder-image.svg)](https://badge.fury.io/rb/placeholder-image)
+[![Gem Version](https://badge.fury.io/rb/placeholder-image.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/placeholder-image)
 [![Ruby](https://img.shields.io/badge/ruby-%3E%3D%203.2-CC342D)](https://www.ruby-lang.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE.txt)
 
+## Examples
 <p>
   <img
     src="https://raw.githubusercontent.com/rodw/placeholder-image-rb/main/examples/images/example-100x160.png"
@@ -92,9 +95,9 @@ use PlaceholderImage::Middleware,
 
 Note that cached entries are compressed PNGs, so worst-case cache memory is roughly `cache_max_entries` times the compressed size of the largest allowed image. Under the default configuration (128 entries, max size 4000x4000 pixels) the largest image encodes to roughly 260 KB yielding a max cache size around 35 MB.
 
-## Running as a Stand-Alone Container
+## Running as a Service
 
-Placeholder-Image can be run as a stand-alone, containerized service. 
+Placeholder-Image can be run as a self-contained, stand-alone, containerized service. 
 
 See the [Docker server documentation](https://github.com/rodw/placeholder-image-rb/blob/main/docker/README.md) for details.
 
@@ -102,6 +105,12 @@ See the [Docker server documentation](https://github.com/rodw/placeholder-image-
 
 For development setup and contribution guidelines, see
 [CONTRIBUTING.md](https://github.com/rodw/placeholder-image-rb/blob/main/CONTRIBUTING.md).
+
+## Security
+
+Placeholder-Image is designed to be safe to expose on a public endpoint. 
+
+See [SECURITY.md](https://github.com/rodw/placeholder-image-rb/blob/develop/SECURITY.md) for more details, or to report a suspected vulnerability.
 
 ## License
 
