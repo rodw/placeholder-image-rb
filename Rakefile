@@ -27,5 +27,5 @@ task "test:coverage" do
   Rake::Task["test"].invoke
 end
 
-desc "Test, lint, typecheck, smoke-test examples"
-task "test:all": %i[test rubocop steep test:examples]
+desc "Test, lint, typecheck, smoke-test docker, smoke-test examples"
+task "test:all": %i[test rubocop steep test:docker test:examples]
