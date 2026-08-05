@@ -101,13 +101,3 @@ To cut a release:
 
 The tag push triggers both workflows, which run the full build and publish the
 gem and the image.
-
-One-time setup:
-
-- RubyGems: configure a Trusted Publisher for `placeholder-image` pointing at
-  `rodw/placeholder-image-rb` and the `Release` workflow.
-- GHCR: nothing is required before the first publish (the package is created
-  automatically and linked to this repository). After the first publish, make
-  the package public: on github.com, go to your profile → *Packages* →
-  `placeholder-image` → *Package settings* → *Change visibility* → Public.
-  Until then, `docker pull` requires authentication.
