@@ -1,9 +1,6 @@
 # Rails Example
 
-This directory contains a small Rails 8 application that integrates the
-[placeholder-image](../../) middleware. It intentionally omits Active Record,
-JavaScript, and asset-pipeline dependencies so the middleware integration stays
-easy to see.
+This directory contains a small Rails 8 application that integrates the [placeholder-image](https://github.com/rodw/placeholder-image-rb/) middleware. 
 
 ## Quick Start
 

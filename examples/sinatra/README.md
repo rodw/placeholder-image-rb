@@ -1,6 +1,6 @@
 # Sinatra Example
 
-This directory contains a simple example of a [Sinatra](https://sinatrarb.com/) app that integrates the [placeholder-image](../../) middleware.
+This directory contains a simple example of a [Sinatra](https://sinatrarb.com/) app that integrates the [placeholder-image](https://github.com/rodw/placeholder-image-rb/) middleware.
 
 ## Quick Start
 

@@ -1,6 +1,6 @@
 # Examples
 
-Complete examples of integrating `placeholder-image` with:
+Complete examples of integrating [placeholder-image](https://github.com/rodw/placeholder-image-rb/) with:
 
 - [Vanilla Rack](rack/)
 - [Sinatra](sinatra/)

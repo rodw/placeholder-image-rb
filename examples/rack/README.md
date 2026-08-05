@@ -1,7 +1,6 @@
 # Rack Example
 
-This directory contains a framework-free [Rack](https://rack.github.io/) application
-that integrates the [placeholder-image](../../) middleware.
+This directory contains a framework-free [Rack](https://rack.github.io/) application that integrates the [placeholder-image](https://github.com/rodw/placeholder-image-rb/) middleware.
 
 ## Quick Start
 
