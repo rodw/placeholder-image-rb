@@ -7,13 +7,16 @@ WORKDIR /app
 # -- STAGE 2: BUILD GEMFILE FROM SOURCE ---------------------------------------
 FROM base AS build
 
-ENV BUNDLE_GEMFILE=/app/docker/Gemfile
+# BUNDLE_FROZEN makes bundle install fail if docker/Gemfile and its committed
+# lockfile have drifted (regenerate with `bundle exec rake docker:lock`).
+ENV BUNDLE_GEMFILE=/app/docker/Gemfile \
+    BUNDLE_FROZEN=true
 
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes build-essential && \
     rm -rf /var/lib/apt/lists/*
 
-COPY docker/Gemfile ./docker/
+COPY docker/Gemfile docker/Gemfile.lock ./docker/
 COPY placeholder-image.gemspec ./
 COPY CHANGELOG.md LICENSE.txt README.md ./
 COPY lib ./lib
