@@ -38,7 +38,8 @@ bundle exec rake build               # build the gem (into ./pkg)
 
 bundle exec rake yard                # build API documentation (into ./doc)
 
-bundle exec rake test                # run the test suite
+bundle exec rake test                # run the unit test suite
+
 bundle exec rake test:coverage       # generate a coverage report (into ./coverage)
 bundle exec simplecov open           # open the coverage report
 
@@ -46,6 +47,11 @@ bundle exec rake rubocop             # run RuboCop (lint/style check)
 bundle exec rake rubocop:autocorrect # apply safe autocorrections
 
 bundle exec rake typecheck           # validate RBS and run Steep
+
+bundle exec rake test:examples       # smoke-test every example app (bundle, boot, fetch an image)
+bundle exec rake test:examples:rack  # smoke-test a single example (also: sinatra, rails)
+
+bundle exec rake test:all            # test, lint, typecheck, smoke-text example apps
 
 bundle exec rake clean               # remove temporary files
 bundle exec rake clobber             # remove all generated files
