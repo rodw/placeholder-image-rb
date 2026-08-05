@@ -1,0 +1,48 @@
+name: Release
+
+# Publishes the gem to RubyGems via Trusted Publishing (OIDC) when a semantic
+# version tag (e.g. v1.2.3) that lives on `main` is pushed:
+#
+#   git switch main && git pull
+#   git tag v1.2.3 && git push origin v1.2.3
+#
+# GitHub cannot filter tag pushes by branch in the trigger, so the tag pattern
+# below narrows to release tags and the first job step verifies the tagged
+# commit is actually on main before anything is published.
+#
+# One-time setup: configure a Trusted Publisher for the `placeholder-image` gem
+# on rubygems.org pointing at rodw/placeholder-image-rb and this workflow. No
+# API key is stored in the repository.
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify the tag is on main
+        run: |
+          git fetch --no-tags origin main
+          if git merge-base --is-ancestor "$GITHUB_SHA" FETCH_HEAD; then
+            echo "✓ ${GITHUB_REF_NAME} is on main"
+          else
+            echo "::error::${GITHUB_REF_NAME} (${GITHUB_SHA}) is not on main; refusing to publish."
+            exit 1
+          fi
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      - run: bundle exec rake
+      - uses: rubygems/release-gem@v1

@@ -1,0 +1,3 @@
+module PlaceholderImage
+  VERSION: String
+end

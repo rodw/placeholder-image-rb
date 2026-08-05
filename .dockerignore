@@ -1,0 +1,14 @@
+# Docker build context exclusions
+.bundle
+.git
+.github
+.ruby-lsp
+coverage
+doc
+examples
+pkg
+scratch
+test
+tmp
+*.gem
+Gemfile.lock

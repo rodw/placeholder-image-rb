@@ -1,0 +1,44 @@
+module PlaceholderImage
+  # Raised for any client error; converted to an HTTP 400 by the middleware.
+  class BadRequest < StandardError
+  end
+
+  # Rack middleware that serves generated placeholder PNGs.
+  class Middleware
+    type rack_response = [ Integer, Hash[String, String], Array[String] ]
+
+    DEFAULTS: Hash[Symbol, untyped]
+    DIMENSION: Regexp
+
+    @app: untyped
+    @options: Hash[Symbol, untyped]
+    @cache: Hash[untyped, untyped]
+    @mutex: Thread::Mutex
+    @owned: Regexp
+    @route: Regexp
+
+    def initialize: (untyped app, **untyped options) -> void
+
+    def call: (Hash[String, untyped] env) -> rack_response
+
+    private
+
+    def cache_headers: (String etag) -> Hash[String, String]
+
+    def fresh?: (Hash[String, untyped] env, String etag) -> bool
+
+    def etag_for: (untyped spec) -> String
+
+    def error: (untyped req_method, Integer status, String message) -> rack_response
+
+    def fetch: (untyped spec) -> String
+
+    def parse: (untyped path, untyped query) -> Hash[Symbol, untyped]
+
+    def parse_dimensions: (untyped path) -> [ Integer, Integer ]
+
+    def parse_query_string: (untyped query) -> Hash[String, String]
+
+    def parse_color: (untyped value, untyped default) -> Array[Integer]
+  end
+end

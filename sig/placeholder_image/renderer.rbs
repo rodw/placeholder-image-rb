@@ -1,0 +1,53 @@
+module PlaceholderImage
+  # Generates a placeholder PNG from dimensions, colors, and label text.
+  module Renderer
+    type rgb = Array[Integer]
+
+    LABEL_WIDTH_PCT: Float
+    LABEL_HEIGHT_PCT: Float
+
+    # Minimal 8-bit truecolor PNG encoder.
+    class Canvas
+      SIGNATURE: String
+
+      attr_reader width: Integer
+      attr_reader height: Integer
+
+      @width: Integer
+      @height: Integer
+      @row_bytes: Integer
+      @data: String
+
+      def initialize: (Integer width, Integer height, PlaceholderImage::Renderer::rgb rgb) -> void
+
+      def []=: (Integer x, Integer y, PlaceholderImage::Renderer::rgb rgb) -> void
+
+      def fill_rect: (Integer x, Integer y, Integer width, Integer height, PlaceholderImage::Renderer::rgb rgb) -> void
+
+      def to_png: () -> String
+
+      private
+
+      def chunk: (String type, String data) -> String
+    end
+
+    # 5x7 bitmap font, just enough to render dimension labels such as "1024x768".
+    module Font
+      FONT_WIDTH: Integer
+      FONT_HEIGHT: Integer
+      GLYPHS: Hash[String, Array[String]]
+
+      def self.advance: (Integer scale) -> Integer
+
+      def self.text_width: (String text, Integer scale) -> Integer
+
+      def self.draw: (PlaceholderImage::Renderer::Canvas canvas, String text, Integer x, Integer y, Integer scale, PlaceholderImage::Renderer::rgb color) -> void
+    end
+
+    def self?.call: (width: Integer, height: Integer, bg: PlaceholderImage::Renderer::rgb, fg: PlaceholderImage::Renderer::rgb, text: String) -> String
+
+    def self?.draw_border: (PlaceholderImage::Renderer::Canvas canvas, PlaceholderImage::Renderer::rgb color) -> void
+
+    def self?.draw_label: (PlaceholderImage::Renderer::Canvas canvas, String text, PlaceholderImage::Renderer::rgb color) -> void
+  end
+end

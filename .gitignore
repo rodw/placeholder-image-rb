@@ -1,0 +1,11 @@
+/.bundle/
+/.ruby-lsp/
+/coverage/
+/pkg/
+/tmp/
+/.yardoc/
+/doc/
+/*.gem
+/Gemfile.lock
+/out-*.png
+/scratch/

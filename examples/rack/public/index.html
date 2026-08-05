@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Placeholder Image in Rack</title>
+  </head>
+  <body>
+    <h1>Using Placeholder Image with Rack</h1>
+
+    <p>
+      This is a framework-free Rack application using the placeholder-image
+      middleware directly in its Rackup configuration.
+    </p>
+    <p>
+      The middleware is mounted at <code>/img/</code>, rather than the default
+      <code>/placeholder</code> prefix.
+    </p>
+
+    <hr>
+
+    <p>Here is a 120 × 120 pixel image using the default colors:</p>
+    <img
+      src="/img/120.png"
+      width="120"
+      height="120"
+      alt="Generated 120x120 placeholder image"
+    >
+    <p>
+      <a href="/img/120.png" target="_blank"">Open the image directly.</a>
+    </p>
+
+    <hr>
+
+    <p>Here is a 300 × 180 pixel image using custom colors:</p>
+    <img
+      src="/img/300x180.png?bg=111&fg=f90"
+      width="300"
+      height="180"
+      alt="Generated 300x180 placeholder image"
+    >
+    <p>
+      <a href="/img/300x180.png?bg=111&fg=f90" target="_blank">Open the image directly.</a>
+    </p>
+  </body>
+</html>

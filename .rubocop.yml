@@ -1,0 +1,44 @@
+AllCops:
+  CacheRootDirectory: tmp/rubocop_cache
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  SuggestExtensions: false
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/BlockLength:
+  Exclude:
+    - "examples/**/*"
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/ParameterLists:
+  Max: 6
+
+Metrics/PerceivedComplexity:
+  Max: 9
+
+Metrics/ClassLength:
+  Exclude:
+    - "test/**/*"
+
+Metrics/ModuleLength:
+  Exclude:
+    - "test/**/*"
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Naming/MethodParameterName:
+  MinNameLength: 1

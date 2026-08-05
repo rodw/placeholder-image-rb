@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# To use the local (parent directory) version of the placeholder-image gem:
+gem "placeholder-image", path: "../../", require: "placeholder_image"
+
+# Alternatively, to use a version of placeholder-image published to rubygems.org:
+# gem "placeholder-image", "~> 1.0", require: "placeholder_image"
+
+gem "puma", "~> 7.0"
+gem "rails", "~> 8.1"
