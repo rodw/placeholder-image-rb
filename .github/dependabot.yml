@@ -18,3 +18,19 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+  # The stand-alone container's pinned base image (docker/Dockerfile).
+  - package-ecosystem: docker
+    directory: "/docker"
+    schedule:
+      interval: weekly
+
+  # The stand-alone container's locked gems (docker/Gemfile.lock).
+  - package-ecosystem: bundler
+    directory: "/docker"
+    schedule:
+      interval: weekly
+    groups:
+      docker-gems:
+        patterns:
+          - "*"
