@@ -1,0 +1,36 @@
+PATH
+  remote: ..
+  specs:
+    placeholder-image (1.0.0)
+      rack (>= 3.0, < 4.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    nio4r (2.7.5)
+    puma (7.2.1)
+      nio4r (~> 2.0)
+    rack (3.2.6)
+    rackup (2.3.1)
+      rack (>= 3)
+
+PLATFORMS
+  aarch64-linux
+  arm64-darwin-25
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  placeholder-image!
+  puma (~> 7.0)
+  rackup (~> 2.2)
+
+CHECKSUMS
+  nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
+  placeholder-image (1.0.0)
+  puma (7.2.1) sha256=d7bf0e9cabd532e0d401e142cd94e3ac531e993610e2d80e6fbf9c26961414b0
+  rack (3.2.6) sha256=5ed78e1f73b2e25679bec7d45ee2d4483cc4146eb1be0264fc4d94cb5ef212c2
+  rackup (2.3.1) sha256=6c79c26753778e90983761d677a48937ee3192b3ffef6bc963c0950f94688868
+
+BUNDLED WITH
+  4.0.16
