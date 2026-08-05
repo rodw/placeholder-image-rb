@@ -3,7 +3,7 @@
 A dependency-light Rack middleware that generates simple placeholder images in pure Ruby (stdlib zlib only, no image gem dependencies). 
 
 [![CI](https://github.com/rodw/placeholder-image-rb/actions/workflows/ci.yml/badge.svg)](https://github.com/rodw/placeholder-image-rb/actions/workflows/ci.yml)
-[![Gem Version](https://img.shields.io/gem/v/placeholder-image)](https://rubygems.org/gems/placeholder-image)
+[![Gem Version](https://badge.fury.io/rb/placeholder-image.svg)](https://badge.fury.io/rb/placeholder-image)
 [![Ruby](https://img.shields.io/badge/ruby-%3E%3D%203.2-CC342D)](https://www.ruby-lang.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE.txt)
 
