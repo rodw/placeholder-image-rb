@@ -12,6 +12,10 @@ require "digest"
 #   GET /placeholder/640x480.png         -> 640x480, default colors
 #   GET /placeholder/300x200.png?bg=eee&fg=999 -> 300x200, specified colors
 #
+# Only requests beginning with "<path_prefix>/" are handled; everything else
+# (including the bare prefix and sibling paths such as "/placeholder.css") is
+# passed through to the downstream application.
+#
 # No image gems required: PNGs are encoded with stdlib zlib.
 module PlaceholderImage
   class BadRequest < StandardError; end
@@ -30,6 +34,9 @@ module PlaceholderImage
 
     DIMENSION = /[1-9]\d*/
 
+    # Maximum length of a client-supplied value echoed back in an error message.
+    ERROR_VALUE_MAX_LENGTH = 32
+
     # @param app [#call] the downstream Rack application.
     # @param options [Hash] configuration overrides merged over {DEFAULTS}.
     # @option options [String] :path_prefix ("/placeholder") URL prefix the middleware serves.
@@ -39,14 +46,19 @@ module PlaceholderImage
     # @option options [Integer] :cache_max_entries (128) in-memory FIFO cache size; +0+ disables caching.
     # @option options [Array(Integer, Integer, Integer), String] :image_default_bg default background color.
     # @option options [Array(Integer, Integer, Integer), String] :image_default_fg default foreground color.
+    # @raise [ArgumentError] if an option key is not present in {DEFAULTS} or a default color is invalid.
     def initialize(app, **options)
+      unknown = options.keys - DEFAULTS.keys
+      raise ArgumentError, "unknown option(s): #{unknown.join(', ')}" unless unknown.empty?
+
       @app     = app
       @options = DEFAULTS.merge(options)
+      %i[image_default_bg image_default_fg].each { |key| @options[key] = resolve_default_color(key) }
       @cache   = {}
       @mutex   = Mutex.new
 
       path_prefix = Regexp.escape(@options[:path_prefix].chomp("/"))
-      @owned = %r{\A#{path_prefix}(?:[./]|\z)}
+      @owned = %r{\A#{path_prefix}/}
       @route = %r{\A#{path_prefix}/(#{DIMENSION})(?:x(#{DIMENSION}))?\.png\z}
     end
 
@@ -56,7 +68,9 @@ module PlaceholderImage
     # @return [Array(Integer, Hash, Array)] a Rack response tuple.
     def call(env)
       return @app.call(env) unless @owned.match?(env["PATH_INFO"])
-      return error(env["REQUEST_METHOD"], 405, "method not allowed") unless %w[GET HEAD].include?(env["REQUEST_METHOD"])
+      unless %w[GET HEAD].include?(env["REQUEST_METHOD"])
+        return error(env["REQUEST_METHOD"], 405, "method not allowed", { "allow" => "GET, HEAD" })
+      end
 
       spec = parse(env["PATH_INFO"], env["QUERY_STRING"].to_s)
       etag = etag_for(spec)
@@ -88,25 +102,37 @@ module PlaceholderImage
       %("#{Digest::SHA256.hexdigest(spec.inspect)[0, 16]}")
     end
 
-    def error(req_method, status, message)
+    def error(req_method, status, message, headers = {})
       body = req_method == "HEAD" ? "" : "#{message}\n"
 
       [
         status,
-        { "content-type" => "text/plain; charset=utf-8",
-          "content-length" => body.bytesize.to_s },
+        headers.merge(
+          "content-type" => "text/plain; charset=utf-8",
+          "content-length" => body.bytesize.to_s
+        ),
         [body]
       ]
     end
 
+    # Fetch the image from the cache if available; otherwise generate (and cache).
+    #
+    # NOTE: Cached entries are compressed PNGs, so worst-case cache memory is
+    #       ~ cache_max_entries * compressed_size_of_largest_allowed_image.
+    #       Under the default config (entries=128 max_px=4000x4000) the largest
+    #       image encodes to ~260 KB; yielding max ~35 MB per cache instance.
     def fetch(spec)
       @mutex.synchronize { return @cache[spec] if @cache.key?(spec) }
 
+      # render outside the mutex: concurrent misses may trigger duplicate rendering
+      # but that's better (cheap, idempotent) than serializing all rendering
       img = Renderer.call(**spec)
 
-      @mutex.synchronize do
-        @cache[spec] = img if @options[:cache_max_entries].positive?
-        @cache.shift while @cache.size > @options[:cache_max_entries] # FIFO eviction
+      if @options[:cache_max_entries].positive?
+        @mutex.synchronize do
+          @cache[spec] = img
+          @cache.shift while @cache.size > @options[:cache_max_entries] # FIFO eviction
+        end
       end
 
       img
@@ -148,14 +174,35 @@ module PlaceholderImage
     end
 
     def parse_color(value, default)
-      value = default if value.nil? || value.empty?
-      return value if value.is_a?(Array)
+      return default if value.nil? || value.empty?
 
+      parse_hex_color(value) or raise BadRequest, "invalid color: #{truncate(value)}"
+    end
+
+    # @return [Array(Integer, Integer, Integer), nil] RGB bytes, or +nil+ if malformed.
+    def parse_hex_color(value)
       hex = value.delete_prefix("#")
       hex = hex.chars.map { |c| c * 2 }.join if hex.length == 3
-      raise BadRequest, "invalid color: #{value}" unless hex.match?(/\A\h{6}\z/)
+      return nil unless hex.match?(/\A\h{6}\z/)
 
       [hex[0, 2], hex[2, 2], hex[4, 2]].map { |pair| pair.to_i(16) }
+    end
+
+    def truncate(value)
+      value.length > ERROR_VALUE_MAX_LENGTH ? "#{value[0, ERROR_VALUE_MAX_LENGTH]}..." : value
+    end
+
+    # Validates and resolves a configured default color to RGB bytes at boot.
+    def resolve_default_color(key)
+      value = @options[key]
+      if value.is_a?(Array)
+        return value if value.length == 3 && value.all? { |c| c.is_a?(Integer) && c.between?(0, 255) }
+      elsif value.is_a?(String)
+        rgb = parse_hex_color(value)
+        return rgb if rgb
+      end
+
+      raise ArgumentError, "invalid #{key}: expected hex color string or array of RGB integers, got #{value.inspect}"
     end
   end
 end
