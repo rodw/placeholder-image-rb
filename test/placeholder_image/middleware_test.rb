@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "test_helper"
+require_relative "../test_helper"
 
-class PlaceholderImageTest < Minitest::Test
+class MiddlewareTest < Minitest::Test
   PNG_SIGNATURE = "\x89PNG\r\n\x1A\n".b
 
   def setup
@@ -74,11 +74,52 @@ class PlaceholderImageTest < Minitest::Test
     assert_equal 400, response.status
   end
 
+  def test_truncates_invalid_color_values_in_error_messages
+    response = @request.get("/placeholder/40x20.png?bg=#{'z' * 100}")
+
+    assert_equal 400, response.status
+    assert_includes response.body, "z" * 32
+    refute_includes response.body, "z" * 33
+  end
+
+  def test_rejects_unknown_options
+    error = assert_raises(ArgumentError) do
+      PlaceholderImage::Middleware.new(->(_env) { [404, {}, []] }, image_max_dim: 10)
+    end
+
+    assert_includes error.message, "image_max_dim"
+  end
+
+  def test_rejects_invalid_default_colors_at_boot
+    fallback = ->(_env) { [404, {}, []] }
+    invalid = [
+      { image_default_bg: "not-a-color" },
+      { image_default_fg: "#12345" },
+      { image_default_bg: [1, 2] },
+      { image_default_fg: [0, 0, 999] },
+      { image_default_bg: [0, 0, "0"] },
+      { image_default_fg: 123 }
+    ]
+
+    invalid.each do |options|
+      assert_raises(ArgumentError, options.inspect) { PlaceholderImage::Middleware.new(fallback, **options) }
+    end
+  end
+
   def test_passes_unmatched_paths_to_the_application
     response = @request.get("/other")
 
     assert_equal 404, response.status
     assert_equal "not found", response.body
+  end
+
+  def test_passes_the_bare_prefix_and_sibling_paths_to_the_application
+    ["/placeholder", "/placeholder.css", "/placeholders"].each do |path|
+      response = @request.get(path)
+
+      assert_equal 404, response.status, path
+      assert_equal "not found", response.body, path
+    end
   end
 
   def test_rejects_invalid_dimensions_below_min
@@ -136,6 +177,8 @@ class PlaceholderImageTest < Minitest::Test
 
   def test_rejects_invalid_request_methods
     response = @request.request("PUT", "/placeholder/20.png")
+
     assert_equal 405, response.status
+    assert_equal "GET, HEAD", response["allow"]
   end
 end
