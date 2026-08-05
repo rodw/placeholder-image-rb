@@ -1,8 +1,8 @@
 # Placeholder Image
 
-A dependency-light [Rack middleware](#installation) that generates simple placeholder images in pure Ruby (stdlib zlib only, no image gem dependencies).
+Lightweight [Rack middleware](#installation) that generates simple placeholder images in pure Ruby.
 
-Also available as stand-alone [Docker image](#running-as-a-stand-alone-container).
+Also available as self-contained [Docker image](#running-as-a-service) suitable for running as a stand-alone service in support of any web stack.
 
 [![CI](https://github.com/rodw/placeholder-image-rb/actions/workflows/ci.yml/badge.svg)](https://github.com/rodw/placeholder-image-rb/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/placeholder-image.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/placeholder-image)
