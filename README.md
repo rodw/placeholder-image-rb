@@ -90,6 +90,7 @@ use PlaceholderImage::Middleware,
 | `image_default_fg` | `[0x99,0x99,0x99]`| Default foreground color used for the border and dimension label. It accepts the same array and hex-string formats as `image_default_bg`; the request's `fg` parameter overrides it. |
 | `cache_max_entries` | `128` | Maximum number of generated images retained in each middleware instance's in-memory FIFO cache. Set to `0` to disable caching. |
 
+Note that cached entries are compressed PNGs, so worst-case cache memory is roughly `cache_max_entries` times the compressed size of the largest allowed image. Under the default configuration (128 entries, max size 4000x4000 pixels) the largest image encodes to roughly 260 KB yielding a max cache size around 35 MB.
 
 ## Running as a Stand-Alone Container
 

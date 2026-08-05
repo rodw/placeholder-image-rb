@@ -4,6 +4,7 @@ source "https://rubygems.org"
 
 gemspec
 
+gem "chunky_png", "~> 1.4", require: false, group: :test
 gem "minitest", "~> 5.25"
 gem "puma", "~> 7.0"
 gem "rackup", "~> 2.2"
