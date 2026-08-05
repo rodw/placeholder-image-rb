@@ -9,6 +9,7 @@ module PlaceholderImage
 
     DEFAULTS: Hash[Symbol, untyped]
     DIMENSION: Regexp
+    ERROR_VALUE_MAX_LENGTH: Integer
 
     @app: untyped
     @options: Hash[Symbol, untyped]
@@ -29,7 +30,7 @@ module PlaceholderImage
 
     def etag_for: (untyped spec) -> String
 
-    def error: (untyped req_method, Integer status, String message) -> rack_response
+    def error: (untyped req_method, Integer status, String message, ?Hash[String, String] headers) -> rack_response
 
     def fetch: (untyped spec) -> String
 
@@ -40,5 +41,11 @@ module PlaceholderImage
     def parse_query_string: (untyped query) -> Hash[String, String]
 
     def parse_color: (untyped value, untyped default) -> Array[Integer]
+
+    def parse_hex_color: (String value) -> Array[Integer]?
+
+    def truncate: (String value) -> String
+
+    def resolve_default_color: (Symbol key) -> Array[Integer]
   end
 end

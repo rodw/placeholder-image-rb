@@ -2,7 +2,23 @@
 
 Placeholder-Image can be run as a stand-alone, containerized service. 
 
-## Launching
+## Pre-built Images
+
+Multi-architecture images (`linux/amd64`, `linux/arm64`) are published to the
+GitHub Container Registry for every release:
+
+```sh
+docker run --rm --publish 9292:9292 ghcr.io/rodw/placeholder-image:latest
+```
+
+Images are tagged `X.Y.Z` and `X.Y` for each release, plus `latest` for the
+most recent release. They are published automatically by the
+[`Docker Publish` workflow](../.github/workflows/docker-publish.yml) whenever a
+release tag is pushed.
+
+To build the image yourself instead, see below.
+
+## Building from Source
 
 Run these commands from the project root to build and launch a production-mode
 Puma server:

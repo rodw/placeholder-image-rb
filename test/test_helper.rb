@@ -7,6 +7,7 @@ if ENV["COVERAGE"] == "true"
     cover "lib/**/*.rb"
     skip "lib/placeholder_image/version.rb"
     enable_coverage :line, :branch, :method
+    minimum_coverage line: 90, branch: 85, method: 90
   end
 end
 
