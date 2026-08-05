@@ -5,6 +5,7 @@
 coverage/
 doc/
 Gemfile.lock
+!/docker/Gemfile.lock
 out-*.png
 pkg/
 scratch/
