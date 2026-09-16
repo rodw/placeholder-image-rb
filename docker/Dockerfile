@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # -- STAGE 1: BASELINE RUBY IMAGE ---------------------------------------------
-FROM ruby:4.0.6-slim-trixie AS base
+FROM ruby:4.0.7-slim-trixie AS base
 WORKDIR /app
 
 # -- STAGE 2: BUILD GEMFILE FROM SOURCE ---------------------------------------
